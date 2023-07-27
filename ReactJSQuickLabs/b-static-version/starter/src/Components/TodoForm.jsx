@@ -29,7 +29,7 @@ function TodoForm(props) {
             <input type='checkbox' checked={todoCompleted} name='todoCompleted' onChange={(e) => {setTodoCompleted(e.target.checked)}}></input>
         </div>
         <div className="form-group"> 
-            <input type="submit" value="Submit" className={"btn ${!todoDescription ? btn-danger : btn-primary}"}  disabled={!todoDescription}/> 
+            <input type="submit" value="Submit" className={`btn ${!todoDescription ? 'btn-danger' : 'btn-primary'}`}  disabled={!todoDescription}/> 
         </div>
     </form>
   )

@@ -23,12 +23,35 @@ jest.mock("../Components/utils/DateCreated.jsx", () => {
  
 
 describe("TodoForm test suite", () => {
+  let submitTodo
+  beforeEach(() => {
+    submitTodo = jest.fn()
+  })
+
+  describe("Form Submission tests", () => {
+    test("it should call submit todo with a prescribed parameter on submission", async () => {
+        const testRenderer = create(<TodoForm submitTodo={submitTodo}/>)
+        const testInstance = testRenderer.root
+        const descInput = testInstance.findByProps({ name: "todoDescription" });
+        const completedInput = testInstance.findByProps({ name: "todoCompleted" });
+        const descTestValue = "Test"
+        const compTestValue = false
+        const form = testInstance.findByType('form')
+        await act(() => completedInput.props.onChange({target: { checked: compTestValue}}))
+        await act(() => descInput.props.onChange({target: { value: descTestValue }}))
+        await act(() => form.props.onSubmit(new Event('form')))
+        expect(submitTodo).toHaveBeenCalledTimes(1)
+        expect(submitTodo).toHaveBeenCalledWith(descTestValue, null, compTestValue)
+        expect(descInput.props.value).toBe('')
+        expect(completedInput.props.checked).toBe(false)
+    })
+  })
 
   describe("DateCreated function and render tests", () => {
 
     test("", () => {
 
-      const testRenderer = create(<TodoForm />);
+      const testRenderer = create(<TodoForm submitTodo={submitTodo}/>);
 
       const testInstance = testRenderer.root;
 
@@ -52,7 +75,7 @@ describe("TodoForm test suite", () => {
 
       const testValue = "test";
 
-      const testRenderer = create(<TodoForm />);
+      const testRenderer = create(<TodoForm submitTodo={submitTodo}/>);
 
       const testInstance = testRenderer.root;
 
@@ -72,7 +95,7 @@ describe("TodoForm test suite", () => {
 
   test("it should render the new value in the checkbox when the toDoCompleted onChange function fires", () => {
 
-    const testRenderer = create(<TodoForm />);
+    const testRenderer = create(<TodoForm submitTodo={submitTodo}/>);
 
     const testInstance = testRenderer.root;
 
@@ -92,7 +115,7 @@ describe("TodoForm test suite", () => {
 
     const testValue = "test"
 
-    const testRenderer = create(<TodoForm />);
+    const testRenderer = create(<TodoForm submitTodo={submitTodo}/>);
 
     const testInstance = testRenderer.root;
 
